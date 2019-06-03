@@ -10,8 +10,11 @@
     "rimraf": "^2.6.3"
   },
   "dependencies": {
+    "@google-cloud/pubsub": "^0.29.1",
     "firebase-admin": "^8.0.0",
-    "firebase-functions": "^2.3.1"
+    "firebase-functions": "^2.3.1",
+    "request": "^2.88.0",
+    "ytdl-core": "^0.29.2"
   },
   "engines": {
     "node": "10"
