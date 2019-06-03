@@ -17,7 +17,7 @@
     "ytdl-core": "^0.29.2"
   },
   "engines": {
-    "node": "10"
+    "node": "8"
   },
   "scripts": {
     "build": "rimraf dist && parcel build src/index.js --target node --detailed-report",
