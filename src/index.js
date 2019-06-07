@@ -1,9 +1,9 @@
-const functions = require('firebase-functions');
-const admin = require('firebase-admin');
-const { PubSub } = require('@google-cloud/pubsub');
-const ytdl = require('ytdl-core');
-const request = require('request');
-const path = require('path');
+const functions = require("firebase-functions");
+const admin = require("firebase-admin");
+const { PubSub } = require("@google-cloud/pubsub");
+const ytdl = require("ytdl-core");
+const request = require("request");
+const path = require("path");
 
 admin.initializeApp();
 const firestore = admin.firestore();
@@ -19,13 +19,16 @@ exports.onUserSignup = functions.auth
   });
 
 exports.onCreateVideo = functions.firestore
-  .document('videos/{vid}')
+  .document("videos/{vid}")
   .onCreate(async (snapshot, { params: { vid } }) => {
-    const { yid, group: { id: gid } } = snapshot.data();
+    const {
+      yid,
+      group: { id: gid }
+    } = snapshot.data();
     const { formats, title, length_seconds } = await ytdl.getInfo(yid);
     const durationInSec = parseInt(length_seconds, 10);
-    const filter = format => format.container === 'mp4'
-      && format.resolution === '1080p';
+    const filter = format =>
+      format.container === "mp4" && format.resolution === "1080p";
     const format = ytdl.chooseFormat(formats, { filter });
     const url = format && format.url;
     const error = url === undefined || url === null;
@@ -43,32 +46,32 @@ exports.onCreateVideo = functions.firestore
   });
 
 exports.onPubSub = functions
-  .runWith({ timeoutSeconds: 540, memory: '2GB' })
+  .runWith({ timeoutSeconds: 540, memory: "2GB" })
   .pubsub.topic(settings.topic)
   .onPublish(({ json: { url, gid, vid } }) => {
     return new Promise((resolve, reject) => {
       const req = request.get(url);
       req.pause();
-      req.on('response', response => {
+      req.on("response", response => {
         const { statusCode } = response;
         if (statusCode !== 200) {
           return reject(new Error(statusCode));
         }
 
-        const filename = [vid, 'mp4'].join('.');
+        const filename = [vid, "mp4"].join(".");
 
         const stream = storage
           .bucket(settings.bucket)
           .file(path.join(gid, filename))
           .createWriteStream({
             public: true,
-            contentType: 'video/mp4'
+            contentType: "video/mp4"
           });
 
         req
           .pipe(stream)
-          .on('finish', resolve)
-          .on('error', error => {
+          .on("finish", resolve)
+          .on("error", error => {
             stream.close();
             reject(error);
           });
@@ -76,7 +79,7 @@ exports.onPubSub = functions
         req.resume();
       });
 
-      req.on('error', error => {
+      req.on("error", error => {
         reject(error);
       });
     });
@@ -86,36 +89,33 @@ exports.onStorage = functions.storage
   .bucket(settings.bucket)
   .object()
   .onFinalize(async ({ bucket, contentType, name }) => {
-    if (!contentType.startsWith('video/')) {
+    if (!contentType.startsWith("video/")) {
       return;
     }
 
     const { name: vid, dir: gid } = path.parse(name);
 
-    const prefix = ['https', 'storage.googleapis.com']
-
-    const url = require('url')
-      .resolve([...prefix, bucket].join('://'), name);
-
-    const videoRef = firestore.doc(`videos/${vid}`);
+    const url = ["https://storage.googleapis.com", bucket, name].join("/");
 
     const p1 = videoRef.update({ ready: true, url });
 
+    const videoRef = firestore.doc(`videos/${vid}`);
+
     const p2 = firestore
-      .collection('v1')
-      .where('video', '==', videoRef)
+      .collection("v1")
+      .where("video", "==", videoRef)
       .get()
       .then(documents => {
         const batch = firestore.batch();
         documents.forEach(document =>
-          batch.update(document.ref, { enabled: true }));
+          batch.update(document.ref, { enabled: true })
+        );
         return batch.commit();
       });
 
-    const topic = ['', 'topics', gid].join('/');
+    const topic = ["", "topics", gid].join("/");
 
-    const p3 = messaging.sendToTopic(topic, { data: { url } }, { priority: 'high' });
+    const p3 = messaging.sendToTopic(topic, { data: { url } });
 
     return [p1, p2, p3].reduce((p, fn) => p.then(fn), Promise.resolve());
   });
-  
