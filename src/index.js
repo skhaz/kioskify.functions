@@ -92,8 +92,10 @@ exports.onStorage = functions.storage
 
     const { name: vid, dir: gid } = path.parse(name);
 
+    const prefix = ['https', 'storage.googleapis.com']
+
     const url = require('url')
-      .resolve(['https', bucket].join('://'), name);
+      .resolve([...prefix, bucket].join('://'), name);
 
     const videoRef = firestore.doc(`videos/${vid}`);
 
