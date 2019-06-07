@@ -97,9 +97,9 @@ exports.onStorage = functions.storage
 
     const url = ["https://storage.googleapis.com", bucket, name].join("/");
 
-    const p1 = videoRef.update({ ready: true, url });
-
     const videoRef = firestore.doc(`videos/${vid}`);
+
+    const p1 = videoRef.update({ ready: true, url });
 
     const p2 = firestore
       .collection("v1")
