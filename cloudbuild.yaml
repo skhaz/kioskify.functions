@@ -1,6 +1,6 @@
 steps:
 - name: 'gcr.io/cloud-builders/yarn'
-  args: ['install']
+  args: ['install', '--build-arg=NODE_VERSION=8.12.0']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '--tag=gcr.io/$PROJECT_ID/functions', '.']
 
