@@ -1,4 +1,5 @@
 **
-!*.json
+!firebase.json
+!package.json
 !yarn.lock
 !/src/**
