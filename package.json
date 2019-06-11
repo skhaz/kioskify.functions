@@ -21,7 +21,7 @@
     "clean": "rimraf dist .cache",
     "build": "parcel build src/index.js --target node --detailed-report",
     "deploy": "yarn build && firebase deploy --force --only functions",
-    "deploy:ci": "cd /app && firebase deploy --force --only functions --token $SECRET --project $PROJECT_ID",
+    "deploy:ci": "cd /app && firebase deploy --force --only functions --token '$SECRET'",
     "format": "prettier --write src/**/*.js"
   }
 }
