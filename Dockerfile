@@ -8,5 +8,3 @@ COPY . .
 
 RUN yarn build
 RUN yarn global add firebase-tools
-
-ENTRYPOINT ["yarn"]
