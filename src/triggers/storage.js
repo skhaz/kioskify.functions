@@ -5,7 +5,7 @@ export default async ({ bucket, contentType, name }, firestore, messaging) => {
 
   const { name: vid, dir: gid } = path.parse(name);
 
-  const url = `https://${bucket}/${name}`
+  const url = `https://${bucket}/${name}`;
 
   const videoRef = firestore.doc(`videos/${vid}`);
 
