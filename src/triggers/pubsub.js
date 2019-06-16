@@ -1,4 +1,4 @@
-const request = require("request");
+import * as request from "request";
 
 export default ({ json: { url, gid, vid } }, bucket) => {
   return new Promise((resolve, reject) => {

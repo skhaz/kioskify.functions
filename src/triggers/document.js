@@ -1,4 +1,4 @@
-const ytdl = require("ytdl-core");
+import * as ytdl from "ytdl-core";
 
 export default async (snapshot, { params: { vid } }, topic) => {
   const {
