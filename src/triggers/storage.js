@@ -1,11 +1,11 @@
-import * as path from "path";
+import { parse } from "path";
 
 export default async ({ bucket, contentType, name }, firestore, messaging) => {
   if (!contentType.startsWith("video/")) {
     return;
   }
 
-  const { name: video, dir: group } = path.parse(name);
+  const { name: video, dir: group } = parse(name);
   const url = `https://${bucket}/${name}`;
   const topic = `/topics/${group}`;
   const videoRef = firestore.doc(`videos/${video}`);
