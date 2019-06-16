@@ -1,6 +1,6 @@
 import * as request from "request";
 
-export default ({ json: { url, group, video } }, bucket) => {
+export default function onPubSub({ json: { url, group, video } }, bucket) {
   return new Promise((resolve, reject) => {
     const req = request.get(url);
     req.pause();
@@ -32,4 +32,4 @@ export default ({ json: { url, group, video } }, bucket) => {
       reject(error);
     });
   });
-};
+}

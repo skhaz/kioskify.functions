@@ -1,6 +1,6 @@
 import * as ytdl from "ytdl-core";
 
-export default async (snapshot, { params: { video } }, topic) => {
+export async function onCreate(snapshot, { params: { video } }, topic) {
   const { group, yid } = snapshot.data();
   const { formats, title, length_seconds } = await ytdl.getInfo(yid);
   const durationInSec = parseInt(length_seconds, 10);
@@ -20,4 +20,4 @@ export default async (snapshot, { params: { video } }, topic) => {
   promises.push(snapshot.ref.update({ title, durationInSec, error }));
 
   return Promise.all(promises);
-};
+}

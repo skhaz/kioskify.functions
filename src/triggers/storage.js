@@ -1,10 +1,6 @@
 import { parse } from "path";
 
-export default async ({ bucket, contentType, name }, firestore, messaging) => {
-  if (!contentType.startsWith("video/")) {
-    return;
-  }
-
+export default function onStorage({ bucket, name }, firestore, messaging) {
   const { name: video, dir: group } = parse(name);
   const url = `https://${bucket}/${name}`;
   const topic = `/topics/${group}`;
@@ -27,4 +23,4 @@ export default async ({ bucket, contentType, name }, firestore, messaging) => {
   const p3 = messaging.sendToTopic(topic, { data: { url } });
 
   return [p1, p2, p3].reduce((p, fn) => p.then(fn), Promise.resolve());
-};
+}
