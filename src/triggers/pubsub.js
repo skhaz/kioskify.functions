@@ -11,7 +11,7 @@ export function onPubSub({ json: { url, group, video } }, bucket) {
       }
 
       const filename = `${group}/${video}.mp4`;
-      const contentType = "video/mp4";
+      const contentType = mime.lookup(filename);
       const stream = bucket.file(filename).createWriteStream({ public: true, contentType });
 
       req
