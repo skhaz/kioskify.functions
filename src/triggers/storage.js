@@ -1,11 +1,13 @@
+import * as path from "path";
+
 export default async ({ bucket, contentType, name }, firestore, messaging) => {
   if (!contentType.startsWith("video/")) {
     return;
   }
 
   const { name: vid, dir: gid } = path.parse(name);
-
   const url = `https://${bucket}/${name}`;
+  const topic = `topics/${gid}`;
 
   const videoRef = firestore.doc(`videos/${vid}`);
 
@@ -22,8 +24,6 @@ export default async ({ bucket, contentType, name }, firestore, messaging) => {
       );
       return batch.commit();
     });
-
-  const topic = ["", "topics", gid].join("/");
 
   const p3 = messaging.sendToTopic(topic, { data: { url } });
 
