@@ -7,7 +7,7 @@ export default async ({ bucket, contentType, name }, firestore, messaging) => {
 
   const { name: video, dir: group } = path.parse(name);
   const url = `https://${bucket}/${name}`;
-  const topic = ["", "topics", group].join("/");
+  const topic = `/topics/${group}`;
   const videoRef = firestore.doc(`videos/${video}`);
 
   const p1 = videoRef.update({ ready: true, url });
