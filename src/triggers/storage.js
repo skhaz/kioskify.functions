@@ -1,6 +1,10 @@
 import { parse } from "path";
 
-export default function onStorage({ bucket, name }, firestore, messaging) {
+export function onStorage({ bucket, contentType, name }, firestore, messaging) {
+  if (!contentType.startsWith("video/")) {
+    return;
+  }
+
   const { name: video, dir: group } = parse(name);
   const url = `https://${bucket}/${name}`;
   const topic = `/topics/${group}`;

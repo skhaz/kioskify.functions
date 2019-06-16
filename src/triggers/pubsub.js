@@ -1,6 +1,6 @@
 import * as request from "request";
 
-export default function onPubSub({ json: { url, group, video } }, bucket) {
+export function onPubSub({ json: { url, group, video } }, bucket) {
   return new Promise((resolve, reject) => {
     const req = request.get(url);
     req.pause();
