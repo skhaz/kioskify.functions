@@ -5,11 +5,10 @@ export default async ({ bucket, contentType, name }, firestore, messaging) => {
     return;
   }
 
-  const { name: vid, dir: gid } = path.parse(name);
+  const { name: video, dir: group } = path.parse(name);
   const url = `https://${bucket}/${name}`;
-  const topic = `topics/${gid}`;
-
-  const videoRef = firestore.doc(`videos/${vid}`);
+  const topic = ["", "topics", group].join("/");
+  const videoRef = firestore.doc(`videos/${video}`);
 
   const p1 = videoRef.update({ ready: true, url });
 

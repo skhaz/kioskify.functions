@@ -1,6 +1,6 @@
 import * as request from "request";
 
-export default ({ json: { url, gid, vid } }, bucket) => {
+export default ({ json: { url, group, video } }, bucket) => {
   return new Promise((resolve, reject) => {
     const req = request.get(url);
     req.pause();
@@ -10,7 +10,7 @@ export default ({ json: { url, gid, vid } }, bucket) => {
         return reject(new Error(statusCode));
       }
 
-      const filename = `${gid}/${vid}.mp4`;
+      const filename = `${group}/${video}.mp4`;
       const blob = bucket.file(filename);
       const stream = blob.createWriteStream({
         public: true,

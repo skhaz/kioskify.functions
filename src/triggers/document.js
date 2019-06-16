@@ -1,10 +1,7 @@
 import * as ytdl from "ytdl-core";
 
-export default async (snapshot, { params: { vid } }, topic) => {
-  const {
-    yid,
-    group: { id: gid }
-  } = snapshot.data();
+export default async (snapshot, { params: { video } }, topic) => {
+  const { group, yid } = snapshot.data();
   const { formats, title, length_seconds } = await ytdl.getInfo(yid);
   const durationInSec = parseInt(length_seconds, 10);
   const filter = format =>
@@ -15,7 +12,7 @@ export default async (snapshot, { params: { vid } }, topic) => {
   const promises = [];
 
   if (!error) {
-    const data = JSON.stringify({ url, gid, vid });
+    const data = JSON.stringify({ group: group.id, url, video });
     const dataBuffer = Buffer.from(data);
     promises.push(topic.publish(dataBuffer));
   }

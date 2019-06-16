@@ -14,7 +14,7 @@ const settings = functions.config().self;
 const pubsub = new PubSub();
 
 exports.onCreate = functions.firestore
-  .document("videos/{vid}")
+  .document("videos/{video}")
   .onCreate((snapshot, context) =>
     triggers.onCreate(snapshot, context, pubsub.topic(settings.topic))
   );
