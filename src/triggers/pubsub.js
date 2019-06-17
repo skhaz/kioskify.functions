@@ -1,6 +1,7 @@
 import { get } from "request";
+import { lookup } from "mime-types";
 
-export function onPubSub({ json: { url, group, video } }, bucket) {
+export function onPubSub({ json: { container, url, group, video } }, bucket) {
   return new Promise((resolve, reject) => {
     const request = get(url);
     request.pause();
@@ -10,9 +11,11 @@ export function onPubSub({ json: { url, group, video } }, bucket) {
         return reject(new Error(statusCode));
       }
 
-      const filename = `${group}/${video}.mp4`;
-      const contentType = mime.lookup(filename);
-      const stream = bucket.file(filename).createWriteStream({ public: true, contentType });
+      const filename = `${group}/${video}.${container}`;
+      const contentType = lookup(filename);
+      const stream = bucket
+        .file(filename)
+        .createWriteStream({ public: true, contentType });
 
       request
         .pipe(stream)

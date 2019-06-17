@@ -2,16 +2,16 @@
   "main": "dist/index.js",
   "private": true,
   "devDependencies": {
-    "firebase-functions-test": "^0.1.6",
-    "firebase-tools": "^6.11.0",
+    "firebase-tools": "^7.0.0",
     "parcel-bundler": "^1.12.3",
     "prettier": "^1.18.2",
     "rimraf": "^2.6.3"
   },
   "dependencies": {
     "@google-cloud/pubsub": "^0.29.1",
-    "firebase-admin": "^8.0.0",
-    "firebase-functions": "^2.3.1",
+    "firebase-admin": "^8.1.0",
+    "firebase-functions": "^3.0.1",
+    "mime-types": "^2.1.24",
     "request": "^2.88.0",
     "ytdl-core": "^0.29.2"
   },
@@ -22,7 +22,6 @@
     "clean": "rimraf dist .cache",
     "build": "parcel build src/index.js --target node --detailed-report",
     "deploy": "yarn build && firebase deploy --force --only functions",
-    "deploy:ci": "cd /app && firebase deploy --force --only functions --token \"$SECRET\"",
     "format": "prettier --write 'src/**/*'"
   }
 }

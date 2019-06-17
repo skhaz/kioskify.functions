@@ -9,15 +9,29 @@ export async function onCreate(snapshot, { params: { video } }, topic) {
   const format = ytdl.chooseFormat(formats, { filter });
   const url = format && format.url;
   const error = url === undefined || url === null;
+  const { container, encoding, fps, itag, resolution } = format;
   const promises = [];
 
   if (!error) {
-    const data = JSON.stringify({ group: group.id, url, video });
+    const data = JSON.stringify({ container, group: group.id, url, video });
     const dataBuffer = Buffer.from(data);
     promises.push(topic.publish(dataBuffer));
   }
 
-  promises.push(snapshot.ref.update({ title, durationInSec, error }));
+  promises.push(
+    snapshot.ref.update({
+      title,
+      error,
+      meta: {
+        container,
+        durationInSec,
+        encoding,
+        fps,
+        itag,
+        resolution
+      }
+    })
+  );
 
   return Promise.all(promises);
 }
