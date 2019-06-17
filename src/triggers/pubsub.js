@@ -12,10 +12,9 @@ export function onPubSub({ json: { container, url, group, video } }, bucket) {
       }
 
       const filename = `${group}/${video}.${container}`;
+      const blob = bucket.file(filename);
       const contentType = lookup(filename);
-      const stream = bucket
-        .file(filename)
-        .createWriteStream({ public: true, contentType });
+      const stream = blob.createWriteStream({ public: true, contentType });
 
       request
         .pipe(stream)
