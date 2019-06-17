@@ -9,7 +9,6 @@ export async function onCreate(snapshot, { params: { video } }, topic) {
   const format = ytdl.chooseFormat(formats, { filter });
   const url = format && format.url;
   const error = url === undefined || url === null;
-  const { container, encoding, fps, itag, resolution } = format;
   const promises = [];
 
   if (!error) {
@@ -17,6 +16,8 @@ export async function onCreate(snapshot, { params: { video } }, topic) {
     const dataBuffer = Buffer.from(data);
     promises.push(topic.publish(dataBuffer));
   }
+
+  const { container, encoding, fps, itag, resolution } = format;
 
   promises.push(
     snapshot.ref.update({
