@@ -6,23 +6,15 @@ export async function onCreate(snapshot, { params: { video } }, topic) {
   const durationInSec = parseInt(length_seconds, 10);
   const filter = format =>
     format.container === "mp4" && format.resolution === "1080p";
-  const format = ytdl.chooseFormat(formats, { filter });
-  const url = format && format.url;
+  const { container, url } = ytdl.chooseFormat(formats, { filter });
   const error = url === undefined || url === null;
   const promises = [];
 
   promises.push(snapshot.ref.update({ durationInSec, error, title }));
 
   if (!error) {
-    const dataBuffer = Buffer.from(
-      JSON.stringify({
-        container: format.container || "mp4",
-        group: group.id,
-        url,
-        video
-      })
-    );
-
+    const data = JSON.stringify({ container, group: group.id, url, video });
+    const dataBuffer = Buffer.from(data);
     promises.push(topic.publish(dataBuffer));
   }
 
