@@ -1,3 +1,5 @@
 export function onUser({ displayName, email, uid }, firestore) {
-  return firestore.doc(`users/${uid}`).set({ displayName, email });
+  return firestore
+    .doc(`users/${uid}`)
+    .update({ displayName, email }, { merge: true });
 }
