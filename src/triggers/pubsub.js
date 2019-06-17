@@ -1,10 +1,10 @@
-import * as request from "request";
+import { get } from "request";
 
 export function onPubSub({ json: { url, group, video } }, bucket) {
   return new Promise((resolve, reject) => {
-    const req = request.get(url);
-    req.pause();
-    req.on("response", response => {
+    const request = get(url);
+    request.pause();
+    request.on("response", response => {
       const { statusCode } = response;
       if (statusCode !== 200) {
         return reject(new Error(statusCode));
@@ -14,7 +14,7 @@ export function onPubSub({ json: { url, group, video } }, bucket) {
       const contentType = mime.lookup(filename);
       const stream = bucket.file(filename).createWriteStream({ public: true, contentType });
 
-      req
+      request
         .pipe(stream)
         .on("finish", resolve)
         .on("error", error => {
@@ -22,10 +22,10 @@ export function onPubSub({ json: { url, group, video } }, bucket) {
           reject(error);
         });
 
-      req.resume();
+      request.resume();
     });
 
-    req.on("error", error => {
+    request.on("error", error => {
       reject(error);
     });
   });
