@@ -11,28 +11,20 @@ export async function onCreate(snapshot, { params: { video } }, topic) {
   const error = url === undefined || url === null;
   const promises = [];
 
+  promises.push(snapshot.ref.update({ durationInSec, error, title }));
+
   if (!error) {
-    const data = JSON.stringify({ container, group: group.id, url, video });
-    const dataBuffer = Buffer.from(data);
+    const dataBuffer = Buffer.from(
+      JSON.stringify({
+        container: format.container || "mp4",
+        group: group.id,
+        url,
+        video
+      })
+    );
+
     promises.push(topic.publish(dataBuffer));
   }
-
-  const { container, encoding, fps, itag, resolution } = format;
-
-  promises.push(
-    snapshot.ref.update({
-      title,
-      error,
-      meta: {
-        container,
-        durationInSec,
-        encoding,
-        fps,
-        itag,
-        resolution
-      }
-    })
-  );
 
   return Promise.all(promises);
 }
