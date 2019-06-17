@@ -21,10 +21,10 @@ export async function onCreate(snapshot, { params: { video } }, topic) {
   promises.push(
     snapshot.ref.update({
       title,
+      durationInSec,
       error,
       meta: {
         container,
-        durationInSec,
         encoding,
         fps,
         itag,

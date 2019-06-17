@@ -33,4 +33,4 @@ exports.onStorage = functions.storage
 
 exports.onUserSignup = functions.auth
   .user()
-  .onCreate(user => tiggers.onUser(user, firestore));
+  .onCreate(user => triggers.onUser(user, firestore));
