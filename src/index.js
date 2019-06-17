@@ -30,3 +30,7 @@ exports.onStorage = functions.storage
   .bucket(settings.bucket)
   .object()
   .onFinalize(object => triggers.onStorage(object, firestore, messaging));
+
+exports.onUserSignup = functions.auth
+  .user()
+  .onCreate(user => tiggers.onUser(user, firestore));
