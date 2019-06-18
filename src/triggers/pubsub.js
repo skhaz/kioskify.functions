@@ -21,6 +21,7 @@ export function onPubSub({ json: { container, url, group, video } }, bucket) {
         .on("finish", resolve)
         .on("error", error => {
           stream.close();
+          blob.delete();
           reject(error);
         });
 
