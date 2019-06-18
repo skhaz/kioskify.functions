@@ -3,10 +3,7 @@ import * as admin from "firebase-admin";
 const { PubSub } = require("@google-cloud/pubsub");
 import * as triggers from "./triggers";
 
-if (!admin.apps || !admin.apps.length) {
-  admin.initializeApp();
-}
-
+admin.initializeApp();
 const firestore = admin.firestore();
 const messaging = admin.messaging();
 const storage = admin.storage();
