@@ -20,7 +20,7 @@
   },
   "scripts": {
     "clean": "rimraf dist .cache",
-    "build": "parcel build src/index.js --target node",
+    "build": "npm run clean && parcel build src/index.js --target node",
     "deploy": "npm run build && firebase deploy --force --only functions",
     "format": "prettier --write {src,tests}/**/*"
   }
