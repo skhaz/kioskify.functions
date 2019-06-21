@@ -20,8 +20,8 @@
   },
   "scripts": {
     "clean": "rimraf dist .cache",
-    "build": "parcel build src/index.js --target node --detailed-report",
-    "deploy": "yarn build && firebase deploy --force --only functions",
+    "build": "parcel build src/index.js --target node",
+    "deploy": "npm run build && firebase deploy --force --only functions",
     "format": "prettier --write {src,tests}/**/*"
   }
 }
