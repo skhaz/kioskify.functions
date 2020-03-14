@@ -6,7 +6,7 @@ export async function onCreate(snapshot, { params: { video } }, topic) {
   const durationInSec = parseInt(length_seconds, 10);
   const filter = format =>
     format.container === "mp4" && format.resolution === "1080p";
-  const { container, url } = ytdl.chooseFormat(formats, { filter });
+  const { container, url } = ytdl.chooseFormat(formats, { filter }); // { quality: "137" }
   const error = url === undefined || url === null;
   const promises = [];
 
