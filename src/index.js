@@ -35,7 +35,7 @@ exports.onStorage = functions.storage
   );
 
 exports.onRetry = functions.pubsub
-  .schedule('every 5 minutes')
+  .schedule('every 1 minutes')
   .onRun(context =>
     triggers.onRetry(context, firestore, topic)
   );
